@@ -20,11 +20,13 @@ def pic_SR(picFolder, scale, device, formats):
     for i in range(data_num):
         print("正在处理第" + str(i+1) +"张图片", end='\t')
         img , name = picture_read(picFolder).__getitem__(i)
+        img = img / 255.
         img = img.to(device)
         img_SR = net(img)
         img_SR = img_SR.permute(0,2,3,1)
         img_SR = numpy.squeeze(img_SR,0).cpu()
         img_SR = numpy.array(img_SR)
+        img_SR = img_SR * 255.
         out_name = name.replace('input','output')
         out_name, _ = os.path.splitext(out_name)    #去除后缀名
         out_name = out_name + '.' + formats

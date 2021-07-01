@@ -44,11 +44,13 @@ def video_SR(videoFolder, scale, device, fourcc, video_format):
                 break
             frame = torch.from_numpy(frame)
             frame = frame.permute(2,0,1)
+            frame = frame / 255.
             frame = frame.unsqueeze(0).to(device)
             frame_SR = net(frame)
             frame_SR = frame_SR.permute(0,2,3,1)        #转换维度，把颜色维度放在最后
             frame_SR = numpy.squeeze(frame_SR,0).cpu()
             frame_SR = numpy.array(frame_SR)
+            frame_SR = frame_SR * 255.
             cv2.imwrite('./temp/tmp.bmp',frame_SR)
             frame_SR = cv2.imread('./temp/tmp.bmp')
             out.write(frame_SR)
